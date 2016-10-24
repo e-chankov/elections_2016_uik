@@ -117,6 +117,8 @@ fluidPage(theme = shinytheme('cerulean'),
                                    min = 0, max = 100, value=c(0,100)),
                       sliderInput("axisYrange", "Границы оси Y",
                                   min = 0, max = 100, value=c(0,100)),
+                      numericInput("issuedBallots", "Минимальное число избирателей проголосовавщих на участке",
+                                   min = 1, max = 5654, value = 1,step = 100),
                       selectInput("region", "Регион",
                                   regions, selected = "Российская Федерация"),
                       br(),
@@ -129,6 +131,6 @@ fluidPage(theme = shinytheme('cerulean'),
                       width = 3
                       ),
                     mainPanel(
-                      plotOutput("scatterPlot", width = '100%', height = 680)
+                      plotOutput("scatterPlot", width = '100%', height = 700)
                     )
                 )

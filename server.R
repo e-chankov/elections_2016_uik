@@ -4,11 +4,13 @@ load("uik.data.Rdata")
 function(input, output){
   selectedData <- reactive({
     if (input$region != "Российская Федерация"){
-      dt <- subset(uik.results, region == input$region, 
+      dt <- subset(uik.results, region == input$region & 
+                   issued.ballots >= input$issuedBallots, 
                    select =c(input$axisX, input$axisY))
     }
     else{
-      dt <- subset(uik.results, select =c(input$axisX, input$axisY))
+      dt <- subset(uik.results, issued.ballots >= input$issuedBallots,
+                   select =c(input$axisX, input$axisY))
     }
     setnames(dt, 1:2, c("x","y"))
     setkey(dt, x, y)
@@ -31,7 +33,9 @@ function(input, output){
     if (req(input$plotType) == "scatterPlot"){
     ggplot(df$data, aes(x,y)) + geom_point(alpha = opacity) + 
         xlab(df$Xlab) + ylab(df$Ylab) +
-        ggtitle(paste0("Выборы-2016 (", input$region, "): Результаты по участковым комиссиям\r\n")) +
+        ggtitle(paste0("Выборы-2016 (", input$region, "): Результаты по участковым комиссиям\r\n",
+                                "Отобраны УИКи, с числом проголосовавших избирателей не менее: ", 
+                                  input$issuedBallots, "\r\n")) +
       theme_bw() + theme(plot.title = element_text(size = 14, face = "bold"),
                          axis.title.x = element_text(face = "bold"),
                          axis.title.y = element_text(face = "bold"))
